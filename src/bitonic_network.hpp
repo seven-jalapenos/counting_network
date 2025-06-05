@@ -5,6 +5,7 @@
 #include <cmath>
 #include <memory>
 #include <vector>
+#include <iostream>
 
 #include "balancer.hpp"
 
@@ -68,6 +69,9 @@ public:
             entry_wires_.push_back(curr);
             entry_wires_.push_back(curr);
         }
+        
+        std::string str;
+        std::cout << str(tmp_wires.begin(), tmp_wires.end());
 
         int peicewise = 2;
         while (peicewise < width_){

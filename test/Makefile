@@ -1,7 +1,7 @@
 # test/Makefile
 
 CXX := g++
-CXXFLAGS := -std=c++20 -g -I../src -I../include
+CXXFLAGS := -std=c++20 -g -I../src
 
 SRC_DIR := ../src
 TEST_DIR := .
@@ -14,7 +14,7 @@ OBJS := $(patsubst %.cpp,$(BIN_DIR)/%.o,$(notdir $(SRCS)))
 
 TARGET := $(BIN_DIR)/bitonic_network_test
 
-all: $(BIN_DIR) $(TARGET)
+all: $(TARGET)
 
 # Create BIN_DIR if it doesn't exist
 $(BIN_DIR):
@@ -25,10 +25,10 @@ $(TARGET): $(OBJS)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
 # Compile each .cpp into BIN_DIR/.o
-$(BIN_DIR)/%.o: $(SRC_DIR)/%.cpp
+$(BIN_DIR)/%.o: $(SRC_DIR)/%.cpp |$(BIN_DIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-$(BIN_DIR)/%.o: $(TEST_DIR)/%.cpp
+$(BIN_DIR)/%.o: $(TEST_DIR)/%.cpp |$(BIN_DIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:

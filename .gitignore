@@ -1,3 +1,4 @@
 
+.vscode
 .clangd
 test/bin/*
