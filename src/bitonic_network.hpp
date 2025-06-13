@@ -3,18 +3,17 @@
 
 #include <cassert>
 #include <cmath>
+#include <format>
 #include <memory>
 #include <vector>
 #include <iostream>
 
-#include "balancer.hpp"
+#include "node.hpp"
 
 template <typename T>
 class BitonicNetwork{
 public:
-    int width_;
-
-    BitonicNetwork(int width){
+    explicit BitonicNetwork(int width){
         // width must be a power of 2
         assert((width > 0) && (width & (width - 1)) == 0);
         width_ = width;
@@ -25,8 +24,8 @@ public:
         entry_wires_.resize(width_);
         output_nodes_.resize(width_);
         // init all nodes
-        for (size_t i = 0; i < balancer_nodes_.size(); i++){
-            balancer_nodes_[i] = std::make_unique<Balancer>();
+        for (auto & balancer_node : balancer_nodes_){
+            balancer_node = std::make_unique<Balancer>();
         }
         // init output nodes
         for (size_t i = 0; i < output_nodes_.size(); i++){
@@ -69,9 +68,6 @@ public:
             entry_wires_.push_back(curr);
             entry_wires_.push_back(curr);
         }
-        
-        std::string str;
-        std::cout << str(tmp_wires.begin(), tmp_wires.end());
 
         int peicewise = 2;
         while (peicewise < width_){
@@ -119,19 +115,35 @@ public:
         }
     }
 
-    OutputNode<T>* traverse(int id){
-        assert(id >= 0 && id < width_);
+    T* traverse(int id){
+        if (!valid_index(id))
+            throw std::logic_error(std::format("invalid index of {} for network of width {}", id, width_));
         
         Node* current = entry_wires_[id];
         while(current->is_internal()){
             current = current->next();
         }
 
-        return dynamic_cast<OutputNode<T>>(current);
+        auto pod = dynamic_cast<OutputNode<T>*>(current);
+        return pod->get_p();
     }
 
+    T* get_elt(int id) {
+        if (!valid_index(id))
+            throw std::logic_error(std::format("invalid index of {} for network of width {}", id, width_));
+
+        return output_nodes_[id]->get_p();
+    }
+
+    int width() const { return width_; }
+
 private:
+    int width_;
     std::vector<std::unique_ptr<Balancer>> balancer_nodes_;
     std::vector<Balancer*> entry_wires_;
     std::vector<std::unique_ptr<OutputNode<T>>> output_nodes_;
+
+    bool valid_index(int i) const {
+        return i >= 0 && i < width_;
+    }
 };
