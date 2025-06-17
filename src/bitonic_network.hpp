@@ -62,11 +62,12 @@ public:
         int balancer_i = 0;
         std::vector<NetworkWire> tmp_wires(width_);
         for (size_t i = 0; i < entry_wires_.size(); i += 2){
-            auto curr = balancer_nodes_[balancer_i++].get();
-            tmp_wires.push_back(NW(curr, &curr->up_, true));
-            tmp_wires.push_back(NW(curr, &curr->down_, false));
-            entry_wires_.push_back(curr);
-            entry_wires_.push_back(curr);
+            int next = i + 1;
+            Balancer* curr = balancer_nodes_[balancer_i++].get();
+            tmp_wires[i] = NW(curr, &curr->up_, true);
+            tmp_wires[next] = NW(curr, &curr->down_, false);
+            entry_wires_[i] = curr;
+            entry_wires_[next] = curr;
         }
 
         int peicewise = 2;
@@ -80,7 +81,7 @@ public:
                     auto curr = balancer_nodes_[balancer_i++].get();
                     tmp_wires[top].set_wire(curr, true);
                     tmp_wires[low].set_wire(curr, false);
-                    top -= 1; low += 1;
+                    top += 1; low -= 1;
                 }
             }
             // merger section

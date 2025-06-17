@@ -1,0 +1,1 @@
+/usr/bin/g++ -g -Wl,--dependency-file=CMakeFiles/bitonic_network_test.dir/link.d CMakeFiles/bitonic_network_test.dir/src/node.cpp.o CMakeFiles/bitonic_network_test.dir/test/bitonic_network_test.cpp.o -o /home/jjurgenson/code_stuff/bitonic_network/test/bin/bitonic_network_test
