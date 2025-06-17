@@ -85,20 +85,21 @@ public:
                 }
             }
             // merger section
-            int m_balancer_length = peicewise / 4;
-            while(m_balancer_length > 1){
-                int m_block_size = m_balancer_length * 2; //check this
-                int m_block_num = width_ / m_balancer_length;
-                for (int i = 0; i < m_block_num; i++){
-                   for (int j = 0; j < m_balancer_length; j++){
+            int block_size = peicewise / 2;
+            while(block_size > 2){
+                int block_num = width_ / block_size;
+                int balancer_length = block_size / 2; //check this
+                int balancer_num = balancer_length;
+                for (int i = 0; i < block_num; i++){
+                   for (int j = 0; j < balancer_num; j++){
                         auto curr = balancer_nodes_[balancer_i++].get();
-                        int top = i * m_block_size + j;
-                        int low = top + m_balancer_length;
+                        int top = i * block_size + j;
+                        int low = top + balancer_length;
                         tmp_wires[top].set_wire(curr, true);
                         tmp_wires[low].set_wire(curr, false);
-                    }
+                   }
                 }
-                m_balancer_length >>= 1;
+                block_size >>= 1;
             }
             //final balancer layer
             int layer_num = width_ / 2;
