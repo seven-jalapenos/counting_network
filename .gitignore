@@ -4,4 +4,6 @@ build
 .idea
 .vscode
 .clangd
+.cache
+compile_commands.json
 test/bin/*

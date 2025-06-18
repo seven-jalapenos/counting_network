@@ -6,14 +6,14 @@
 #include <format>
 #include <memory>
 #include <vector>
-#include <iostream>
+// #include <iostream>
 
 #include "node.hpp"
 
 template <typename T>
-class BitonicNetwork{
+class OrderingNetwork{
 public:
-    explicit BitonicNetwork(int width){
+    explicit OrderingNetwork(int width){
         // width must be a power of 2
         assert((width > 0) && (width & (width - 1)) == 0);
         width_ = width;

@@ -3,12 +3,12 @@
 #include <iostream>
 #include <sstream>
 
-#include "../src/bitonic_network.hpp"
+#include "ordering_network.hpp"
 
 int main(){
 	using std::vector;
 	using std::string;
-    BitonicNetwork<vector<int>> net(8);
+    OrderingNetwork<vector<int>> net(8);
 
 	auto vec_to_string = [](const std::vector<int>& vec)->std::string{ // test
 	    std::ostringstream output;
