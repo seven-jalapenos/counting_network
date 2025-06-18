@@ -10,7 +10,7 @@ Balancer::Balancer(Node* up, Node* down):
 
 Node* Balancer::next(){
     std::lock_guard lock(mtx_);
-    Node* next = go_up_ == true ? up_ : down_;
+    Node* next = go_up_ ? up_ : down_;
     go_up_ = !go_up_;
     return next;
 }

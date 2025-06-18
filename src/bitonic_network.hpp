@@ -38,8 +38,9 @@ public:
             Balancer* node_;
             Node** wire_;
             bool is_up_;
+            int id; // debug
 
-            void set_wire(Balancer* n, bool is_top){
+            void set_wire(Balancer* n, bool is_top, int i){
                 // connect old node to new node
                 is_up_? node_->up_ = n: node_->down_ = n;
                 // update wire
@@ -52,6 +53,7 @@ public:
                 }
                 // update node
                 node_ = n;
+                id = i; // debug
             }
             void set_wire(OutputNode<T>* n){
                 is_up_? node_->up_ = n: node_->down_ = n;
@@ -63,9 +65,10 @@ public:
         std::vector<NetworkWire> tmp_wires(width_);
         for (size_t i = 0; i < entry_wires_.size(); i += 2){
             int next = i + 1;
-            Balancer* curr = balancer_nodes_[balancer_i++].get();
-            tmp_wires[i] = NW(curr, &curr->up_, true);
-            tmp_wires[next] = NW(curr, &curr->down_, false);
+            int j = balancer_i++;
+            Balancer* curr = balancer_nodes_[j].get();
+            tmp_wires[i] = NW(curr, &curr->up_, true, j);
+            tmp_wires[next] = NW(curr, &curr->down_, false, j);
             entry_wires_[i] = curr;
             entry_wires_[next] = curr;
         }
@@ -78,9 +81,10 @@ public:
                 int top = j;
                 int low = top + peicewise - 1;
                 while (top < low){
-                    auto curr = balancer_nodes_[balancer_i++].get();
-                    tmp_wires[top].set_wire(curr, true);
-                    tmp_wires[low].set_wire(curr, false);
+                    int j = balancer_i++;
+                    auto curr = balancer_nodes_[j].get();
+                    tmp_wires[top].set_wire(curr, true, j);
+                    tmp_wires[low].set_wire(curr, false, j);
                     top += 1; low -= 1;
                 }
             }
@@ -91,13 +95,14 @@ public:
                 int balancer_length = block_size / 2; //check this
                 int balancer_num = balancer_length;
                 for (int i = 0; i < block_num; i++){
-                   for (int j = 0; j < balancer_num; j++){
-                        auto curr = balancer_nodes_[balancer_i++].get();
+                    for (int j = 0; j < balancer_num; j++){
+                        int k = balancer_i++;
+                        auto curr = balancer_nodes_[k].get();
                         int top = i * block_size + j;
                         int low = top + balancer_length;
-                        tmp_wires[top].set_wire(curr, true);
-                        tmp_wires[low].set_wire(curr, false);
-                   }
+                        tmp_wires[top].set_wire(curr, true, k);
+                        tmp_wires[low].set_wire(curr, false, k);
+                    }
                 }
                 block_size >>= 1;
             }
@@ -106,9 +111,10 @@ public:
             for (int i = 0; i < layer_num; i++) {
                 int top = i * 2;
                 int low = top + 1;
-                auto curr = balancer_nodes_[balancer_i++].get();
-                tmp_wires[i].set_wire(curr, true);
-                tmp_wires[low].set_wire(curr, false);
+                int j = balancer_i++;
+                auto curr = balancer_nodes_[j].get();
+                tmp_wires[top].set_wire(curr, true, j);
+                tmp_wires[low].set_wire(curr, false, j);
             }
         }
         //connect to ouptut wires
