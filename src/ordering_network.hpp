@@ -1,5 +1,6 @@
 
-#pragma once
+#ifndef ORDERING_NETWORK_H
+#define ORDERING_NETWORK_H
 
 #include <cassert>
 #include <cmath>
@@ -10,6 +11,8 @@
 
 #include "node.hpp"
 
+namespace seven_jalapenos::CountingNetwork{
+
 template <typename T>
 class OrderingNetwork{
 public:
@@ -17,6 +20,7 @@ public:
         // width must be a power of 2
         assert((width > 0) && (width & (width - 1)) == 0);
         width_ = width;
+        using namespace seven_jalapenos::CountingNetwork;
 
         int q = std::log2(width_);
         int balancers = (width_/2) * q * (q + 1) / 2;// number of balancers
@@ -29,7 +33,7 @@ public:
         }
         // init output nodes
         for (size_t i = 0; i < output_nodes_.size(); i++){
-            output_nodes_[i] = std::make_unique<OutputNode<T>>();
+            output_nodes_[i] = std::make_unique<OutputNode<T>>(i);
         }
 
         using std::ref;
@@ -123,7 +127,7 @@ public:
         }
     }
 
-    T* traverse(int id){
+    OutputNode<T>* traverse(int id){
         if (!valid_index(id))
             throw std::logic_error(std::format("invalid index of {} for network of width {}", id, width_));
         
@@ -133,7 +137,7 @@ public:
         }
 
         auto pod = dynamic_cast<OutputNode<T>*>(current);
-        return pod->get_p();
+        return pod;
     }
 
     T* get_elt(int id) {
@@ -145,13 +149,17 @@ public:
 
     int width() const { return width_; }
 
-private:
+protected:
     int width_;
-    std::vector<std::unique_ptr<Balancer>> balancer_nodes_;
-    std::vector<Balancer*> entry_wires_;
-    std::vector<std::unique_ptr<OutputNode<T>>> output_nodes_;
+    std::vector<std::unique_ptr<Balancer>> balancer_nodes_{};
+    std::vector<Balancer*> entry_wires_{};
+    std::vector<std::unique_ptr<OutputNode<T>>> output_nodes_{};
 
     bool valid_index(int i) const {
         return i >= 0 && i < width_;
     }
 };
+
+} // seven_jalapenos::counting_network
+
+#endif // ORDERING_NETWORK_H

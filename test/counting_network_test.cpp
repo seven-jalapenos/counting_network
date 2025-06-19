@@ -1,32 +1,17 @@
+//
+// Created by jjurgenson on 25/06/19.
+//
 
-#include <vector>
+
+#include "counting_network.hpp"
+
 #include <iostream>
-#include <sstream>
 
-#include "ordering_network.hpp"
+int main() {
+    seven_jalapenos::CountingNetwork::CountingNetwork net(8);
 
-int main(){
-	using std::vector;
-	using std::string;
-    OrderingNetwork<vector<int>> net(8);
+    for(int i = 0; i < 10; ++i) {
+        std::cout << net.get_and_increment(0);
+    }
 
-	auto vec_to_string = [](const std::vector<int>& vec)->std::string{ // test
-	    std::ostringstream output;
-	    for(int i : vec){
-	        output << i << " ";
-	    }
-	    return output.str();
-	};
-
-	
-	for (int i = 0; i < 16; i++){
-		auto q = net.traverse(1);
-		q->push_back(i);
-	}
-
-	for (int i = 0; i < net.width(); ++i) {
-		string str = vec_to_string(*net.get_elt(i));
-		std::cout << str << "\n";
-	}
-    return 0;
 }
