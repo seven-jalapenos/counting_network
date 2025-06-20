@@ -6,7 +6,7 @@ add_executable( test_ordering
 
 
 target_link_libraries(test_ordering
-    ordering_network
+    counting_network
 )
 
 set_target_properties(test_ordering PROPERTIES
@@ -18,7 +18,7 @@ add_executable(test_counting
 )
 
 target_link_libraries(test_counting
-        ordering_network
+        counting_network
 )
 
 set_target_properties(test_counting PROPERTIES

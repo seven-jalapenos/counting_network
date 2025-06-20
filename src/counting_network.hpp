@@ -9,16 +9,19 @@
 namespace seven_jalapenos {
 namespace CountingNetwork {
 
-// class CountingTuple {
-// public:
-//     size_t arr[];
-//
-// };
+struct CountingTuple {
+    size_t count[2];
+    bool idx0_is_larger;
 
-class CountingNetwork : OrderingNetwork<size_t[]> {
+    CountingTuple() : idx0_is_larger(true) {}
+};
+
+class CountingNetwork : OrderingNetwork {
 public:
-    explicit CountingNetwork(int width)
-    : OrderingNetwork(width) {}
+    std::vector<CountingTuple> counts;
+    std::vector<std::mutex> mtx_arr_;
+
+    explicit CountingNetwork(int width);
 
     size_t get_and_increment(int id);
 };

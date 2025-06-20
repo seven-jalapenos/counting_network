@@ -11,7 +11,9 @@ int main(){
 	using std::vector;
 	using std::string;
 	using seven_jalapenos::CountingNetwork::OrderingNetwork;
-    OrderingNetwork<vector<int>> net(8);
+	int width = 8;
+    OrderingNetwork net(width);
+	vector<vector<int>> v(width);
 
 	auto vec_to_string = [](const std::vector<int>& vec)->std::string{ // test
 	    std::ostringstream output;
@@ -23,12 +25,12 @@ int main(){
 
 	
 	for (int i = 0; i < 16; i++){
-		auto q = net.traverse(1);
-		q->push_back(i);
+		int q = net.traverse(1);
+		v[q].push_back(i);
 	}
 
-	for (int i = 0; i < net.width(); ++i) {
-		string str = vec_to_string(*net.get_elt(i));
+	for (int i = 0; i < width; ++i) {
+		string str = vec_to_string(v[i]);
 		std::cout << str << "\n";
 	}
     return 0;
