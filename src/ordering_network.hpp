@@ -33,7 +33,7 @@ public:
         }
         // init output nodes
         for (size_t i = 0; i < output_nodes_.size(); i++){
-            output_nodes_[i] = std::make_unique<OutputNode<T>>(i);
+            output_nodes_[i] = std::make_unique<ExternalBalancer<T>>(i);
         }
 
         using std::ref;
@@ -59,7 +59,7 @@ public:
                 node_ = n;
                 id = i; // debug
             }
-            void set_wire(OutputNode<T>* n){
+            void set_wire(ExternalBalancer<T>* n){
                 is_up_? node_->up_ = n: node_->down_ = n;
             }
         } NW;
@@ -127,7 +127,7 @@ public:
         }
     }
 
-    OutputNode<T>* traverse(int id){
+    ExternalBalancer<T>* traverse(int id){
         if (!valid_index(id))
             throw std::logic_error(std::format("invalid index of {} for network of width {}", id, width_));
         
@@ -136,7 +136,7 @@ public:
             current = current->next();
         }
 
-        auto pod = dynamic_cast<OutputNode<T>*>(current);
+        auto pod = dynamic_cast<ExternalBalancer<T>*>(current);
         return pod;
     }
 
@@ -153,7 +153,7 @@ protected:
     int width_;
     std::vector<std::unique_ptr<Balancer>> balancer_nodes_{};
     std::vector<Balancer*> entry_wires_{};
-    std::vector<std::unique_ptr<OutputNode<T>>> output_nodes_{};
+    std::vector<std::unique_ptr<ExternalBalancer<T>>> output_nodes_{};
 
     bool valid_index(int i) const {
         return i >= 0 && i < width_;

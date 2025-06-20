@@ -10,7 +10,7 @@ namespace seven_jalapenos {
 namespace CountingNetwork {
 
 size_t CountingNetwork::get_and_increment(int id) {
-    OutputNode<size_t[2]>* node = traverse(id);
+    ExternalBalancer<size_t[2]>* node = traverse(id);
     std::lock_guard lck(node->mtx_);
     auto arr = node->get_p();
     size_t* larger;

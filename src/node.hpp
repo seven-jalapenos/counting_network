@@ -28,10 +28,10 @@ public:
 };
 
 template<typename T>
-class OutputNode final : public Node{
+class ExternalBalancer final : public Node{
 public:
     // explicit OutputNode(T elt): point_(std::make_unique<T>(elt)) {}
-    explicit OutputNode(int idx): point_(new T), idx_(idx) {}
+    explicit ExternalBalancer(int idx): point_(new T), idx_(idx) {}
 
     T* get_p() { return point_.get(); }
     [[nodiscard]] int get_idx() const { return idx_; }
