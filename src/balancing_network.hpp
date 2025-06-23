@@ -1,6 +1,6 @@
 
-#ifndef ORDERING_NETWORK_H
-#define ORDERING_NETWORK_H
+#ifndef BALANCING_NETWORK
+#define BALANCING_NETWORK
 
 #include <memory>
 #include <vector>
@@ -9,9 +9,9 @@
 
 namespace seven_jalapenos::CountingNetwork{
 
-class OrderingNetwork{
+class BalancingNetwork{
 public:
-    explicit OrderingNetwork(int width);
+    explicit BalancingNetwork(int width);
 
     int traverse(int id);
 

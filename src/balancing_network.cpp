@@ -12,7 +12,7 @@
 
 namespace seven_jalapenos::CountingNetwork{
 
-OrderingNetwork::OrderingNetwork(int width){
+BalancingingNetwork::BalancingingNetwork(int width){
     // width must be a power of 2
     assert((width > 0) && (width & (width - 1)) == 0);
     width_ = width;
@@ -121,7 +121,7 @@ OrderingNetwork::OrderingNetwork(int width){
     }
 }
 
-int OrderingNetwork::traverse(int id){
+int BalancingingNetwork::traverse(int id){
     if (!valid_index(id))
         throw std::logic_error(std::format("invalid index of {} for network of width {}", id, width_));
     Balancer* current = entry_wires_[id];
@@ -132,9 +132,9 @@ int OrderingNetwork::traverse(int id){
     return pod->next();
 }
 
-[[nodiscard]] bool OrderingNetwork::valid_index(int i) const { return i >= 0 && i < width_; }
+[[nodiscard]] bool BalancingingNetwork::valid_index(int i) const { return i >= 0 && i < width_; }
 
-[[nodiscard]] int OrderingNetwork::width() const { return width_; }
+[[nodiscard]] int BalancingingNetwork::width() const { return width_; }
 
 
 } // seven_jalapenos::CountingNetwork

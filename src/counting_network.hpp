@@ -4,7 +4,7 @@
 
 #ifndef COUNTING_NETWORK_HPP
 #define COUNTING_NETWORK_HPP
-#include "ordering_network.hpp"
+#include "balancing_network.hpp"
 
 namespace seven_jalapenos {
 namespace CountingNetwork {
@@ -16,7 +16,7 @@ struct CountingTuple {
     CountingTuple() : idx0_is_larger(true) {}
 };
 
-class CountingNetwork : OrderingNetwork {
+class CountingNetwork : BalancingNetwork {
 public:
     std::vector<CountingTuple> counts;
     std::vector<std::mutex> mtx_arr_;

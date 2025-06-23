@@ -5,14 +5,14 @@
 #include <iostream>
 #include <sstream>
 
-#include "ordering_network.hpp"
+#include "balancing_network.hpp"
 
 int main(){
 	using std::vector;
 	using std::string;
-	using seven_jalapenos::CountingNetwork::OrderingNetwork;
+	using seven_jalapenos::CountingNetwork::BalancingNetwork;
 	int width = 8;
-    OrderingNetwork net(width);
+    BalancingNetwork net(width);
 	vector<vector<int>> v(width);
 
 	auto vec_to_string = [](const std::vector<int>& vec)->std::string{ // test

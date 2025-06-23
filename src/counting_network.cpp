@@ -10,7 +10,7 @@ namespace seven_jalapenos {
 namespace CountingNetwork {
 
 CountingNetwork::CountingNetwork(int width)
-    :OrderingNetwork(width), counts(width), mtx_arr_(width) {
+    :BalancingNetwork(width), counts(width), mtx_arr_(width) {
         for (int i = 0; i < width; i++) {
             counts[i].count[0] = i;
         }
