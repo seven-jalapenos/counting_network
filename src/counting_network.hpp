@@ -18,7 +18,7 @@ namespace CountingNetwork {
 
 class CountingNetwork : BalancingNetwork {
 public:
-    std::vector<unsigned long> counts;
+    std::vector<size_t> counts;
     std::vector<std::mutex> mtx_arr_;
 
     explicit CountingNetwork(int width);
