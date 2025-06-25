@@ -3,8 +3,46 @@
 //
 
 #include "hash_q.hpp"
+#include "hash.hpp"
 
 namespace seven_jalapenos {
 namespace HashQ {
+
+int HashQ::dequeue(int id) {
+    size_t key = dq_net.get_and_increment(id);
+    HashSegment* next = q_length > 1 ? head_->next.get() : nullptr;
+    // if we are slightly early we can dequeue first >>
+    if (!head_->hash.valid_dq(key)){
+        if (q_length == 1)
+            throw std::runtime_error("empty Queue exception");
+        int ret = next->hash.get_elt(key);
+        return ret;
+    }
+    int ret = head_->hash.get_elt(key);
+    // thread to dequeue last elt moves head_ >>
+    if (key % hash_length == hash_length - 1 && q_length > 1) {
+        while(!head_->hash.is_empty());
+        head_ = std::move(head_->next);
+        q_length--;
+    }
+    return ret;
+}
+
+void HashQ::enqueue(int value, int id) {
+    size_t key = nq_net.get_and_increment(id);
+    HashSegment* aux = aux_tail_.get();
+    // other threads will enqueue at aux_tail_ if tail_ is being reset
+    if (!tail_->hash.put(key, value)){
+        aux->hash.put(key, value);
+    }
+    // thread to enqueue last elt will add new segment and reset aux_tail_ >>
+    if (key % hash_length == hash_length - 1 && q_length > 1){
+        while(!tail_->hash.is_full());
+        tail_->next = std::move(aux_tail_);
+        aux_tail_ = std::make_unique<HashSegment>(hash_length);
+    }
+}
+
+
 } // HashQ
 } // seven_jalapenos

@@ -3,7 +3,7 @@ set(Lib counting_network)
 add_library(${Lib} STATIC
     balancer.cpp
     counting_network.cpp
-        balancing_network.cpp
+    balancing_network.cpp
 
 )
 

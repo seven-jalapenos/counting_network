@@ -24,6 +24,8 @@ public:
     explicit CountingNetwork(int width);
 
     size_t get_and_increment(int id);
+
+    [[nodiscard]] int width() const override;
 };
 
 } // CountingNetwork

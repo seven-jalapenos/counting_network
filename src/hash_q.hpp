@@ -14,14 +14,25 @@ namespace HashQ {
 
 class HashQ {
 public:
-    void enqueue(int value);
-    int dequeue();
+    int const net_width;
+    int const hash_length;
+    size_t q_length;
+    CountingNetwork::CountingNetwork nq_net;
+    CountingNetwork::CountingNetwork dq_net;
+
+    HashQ(int length, int width)
+        :net_width(width), hash_length(length), q_length(1),
+         nq_net(width), dq_net(width),
+         head_(new HashSegment(length)), tail_(head_.get()), aux_tail_(new HashSegment(length)) {}
+    void enqueue(int value, int id);
+    int dequeue(int id);
 
 private:
-    HashSegment* head_;
+    std::unique_ptr<HashSegment> head_;
     HashSegment* tail_;
-
-
+    std::unique_ptr<HashSegment> aux_tail_;
+    // only key % length == 0 will swing tail_ to *aux_tail_
+    // aux_tail_ will take early enqueues
 };
 
 } // HashQ

@@ -8,11 +8,13 @@
 #include <memory>
 #include <vector>
 
-#include "ordering_network.hpp"
+#include "balancing_network.hpp"
 
 namespace seven_jalapenos::CountingNetwork{
 
-BalancingingNetwork::BalancingingNetwork(int width){
+BalancingNetwork::~BalancingNetwork() = default;
+
+BalancingNetwork::BalancingNetwork(int width){
     // width must be a power of 2
     assert((width > 0) && (width & (width - 1)) == 0);
     width_ = width;
@@ -121,9 +123,9 @@ BalancingingNetwork::BalancingingNetwork(int width){
     }
 }
 
-int BalancingingNetwork::traverse(int id){
+int BalancingNetwork::traverse(int id){
     if (!valid_index(id))
-        throw std::logic_error(std::format("invalid index of {} for network of width {}", id, width_));
+        id = id % width_;
     Balancer* current = entry_wires_[id];
     while(current->is_internal()){
         current = current->next();
@@ -132,9 +134,9 @@ int BalancingingNetwork::traverse(int id){
     return pod->next();
 }
 
-[[nodiscard]] bool BalancingingNetwork::valid_index(int i) const { return i >= 0 && i < width_; }
+[[nodiscard]] int BalancingNetwork::width() const { return width_; }
 
-[[nodiscard]] int BalancingingNetwork::width() const { return width_; }
+[[nodiscard]] bool BalancingNetwork::valid_index(int id) const { return id < width_ && id % width_ == 0; }
 
 
 } // seven_jalapenos::CountingNetwork

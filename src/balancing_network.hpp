@@ -13,9 +13,11 @@ class BalancingNetwork{
 public:
     explicit BalancingNetwork(int width);
 
+    ~BalancingNetwork();
+
     int traverse(int id);
 
-    [[nodiscard]] int width() const;
+    [[nodiscard]] virtual int width() const;
 
 protected:
     int width_;
