@@ -4,7 +4,8 @@
 #define BALANCER_NODE
 
 #include <mutex>
-#include <memory>
+#include <atomic>
+// #include <memory>
 
 namespace seven_jalapenos::CountingNetwork{
 
@@ -22,8 +23,7 @@ public:
 
     Balancer* up_;
     Balancer* down_;
-    bool go_up_;
-    std::mutex mtx_;
+    std::atomic<size_t> count_;
 
     explicit Balancer(Balancer* up=nullptr, Balancer* down=nullptr);
     Balancer* next();
@@ -34,10 +34,9 @@ class ExternalBalancer final : public Balancer{
 public:
     int up_;
     int down_;
-    bool go_up_;
-    std::mutex mtx_;
+    std::atomic<size_t> count_;
     // explicit OutputNode(T elt): point_(std::make_unique<T>(elt)) {}
-    explicit ExternalBalancer(int idx): up_(idx), down_(idx + 1), go_up_(true) {}
+    explicit ExternalBalancer(int idx): up_(idx), down_(idx + 1), count_(0) {}
     int next();
     [[nodiscard]] bool is_internal() const override;
 };

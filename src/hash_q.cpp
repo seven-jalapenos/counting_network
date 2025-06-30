@@ -31,15 +31,16 @@ int HashQ::dequeue(int id) {
 void HashQ::enqueue(int value, int id) {
     size_t key = nq_net.get_and_increment(id);
     HashSegment* aux = aux_tail_.get();
-    // other threads will enqueue at aux_tail_ if tail_ is being reset
+    // threads will enqueue at aux_tail_ if early or tail_ is being reset >>
     if (!tail_->hash.put(key, value)){
         aux->hash.put(key, value);
     }
-    // thread to enqueue last elt will add new segment and reset aux_tail_ >>
-    if (key % hash_length == hash_length - 1 && q_length > 1){
+    // thread to enqueue last elt will move tail_ and reset aux_tail_ >>
+    if (key % hash_length == hash_length - 1){
         while(!tail_->hash.is_full());
         tail_->next = std::move(aux_tail_);
         aux_tail_ = std::make_unique<HashSegment>(hash_length);
+        q_length++;
     }
 }
 

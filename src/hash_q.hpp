@@ -31,8 +31,7 @@ private:
     std::unique_ptr<HashSegment> head_;
     HashSegment* tail_;
     std::unique_ptr<HashSegment> aux_tail_;
-    // only key % length == 0 will swing tail_ to *aux_tail_
-    // aux_tail_ will take early enqueues
+    // aux_tail_ will catch early enqueues
 };
 
 } // HashQ

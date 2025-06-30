@@ -13,27 +13,28 @@
 
 int main() {
     typedef seven_jalapenos::CountingNetwork::CountingNetwork Network;
-    int width = 4;
+    int width = 8;
     int t_num = 1000;
-    int reps = 1;
-    int wait = 5;
+    int reps = 4;
+    int wait = 0;
     Network net(width);
     std::thread threads[t_num];
     std::mutex io_mutex;
     std::vector<std::string> rets;
     std::vector<std::string> errs;
 
-    auto get_inc = [&, width] (int id, int rep, Network& net) -> void {
+    auto get_inc = [&, width] (const int id, const int rep, Network& net) -> void {
         size_t counts[rep];
         for (int i = 0; i < rep; i++){
-            rets[i] = net.get_and_increment(id);
+            counts[i] = net.get_and_increment(id);
         }
         std::lock_guard lock(io_mutex);
         for (int i = 0; i < rep; i++){
             size_t res = counts[i];
             std::string str = std::format("t{}: {}", id, res);
-            if (id != res / i)
+            if (id != counts[i] / rep){
                  errs.push_back(str);
+            }
             rets.push_back(str);
         }
     };

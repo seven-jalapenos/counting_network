@@ -25,7 +25,7 @@ bool Hash::put(int key, int value) {
 
 bool Hash::valid_dq(int key) {
     int h = get_hash(key);
-    return arr[h].empty;
+    return !arr[h].empty;
 }
 
 int Hash::get_elt(int key) {

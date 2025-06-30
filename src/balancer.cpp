@@ -1,17 +1,16 @@
 
-#include <mutex>
+// #include <mutex>
 
 #include "balancer.hpp"
 
 namespace seven_jalapenos::CountingNetwork{
 
 Balancer::Balancer(Balancer* up, Balancer* down):
-    up_(up), down_(down), go_up_(true) {}
+    up_(up), down_(down), count_(0) {}
 
 Balancer* Balancer::next() {
-    std::lock_guard lock(mtx_);
-    Balancer *next = go_up_ ? up_ : down_;
-    go_up_ = !go_up_;
+    size_t old = count_.fetch_add(1, std::memory_order_relaxed);
+    Balancer *next = old % 2 == 0 ? up_ : down_;
     return next;
 }
 
@@ -20,9 +19,8 @@ bool Balancer::is_internal() const { return true; }
 bool ExternalBalancer::is_internal() const { return false; }
 
 int ExternalBalancer::next() {
-    std::lock_guard lock(mtx_);
-    int next = go_up_ ? up_ : down_;
-    go_up_ = !go_up_;
+    size_t old = count_.fetch_add(1, std::memory_order_relaxed);
+    int next = old % 2 == 0 ? up_ : down_;
     return next;
 }
 
