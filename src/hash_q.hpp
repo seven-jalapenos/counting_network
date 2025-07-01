@@ -5,8 +5,8 @@
 #ifndef HASH_Q_HPP
 #define HASH_Q_HPP
 
-#import "hash.hpp"
-#import "counting_network.hpp"
+#include "hash.hpp"
+#include "counting_network.hpp"
 
 namespace seven_jalapenos {
 namespace HashQ {

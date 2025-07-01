@@ -1,7 +1,8 @@
 
-#import <iostream>
+#include <iostream>
+#include <thread>
 
-#import "hash_q.hpp"
+#include "hash_q.hpp"
 
 int main(){
     using namespace seven_jalapenos::HashQ;

@@ -3,7 +3,8 @@
 #ifndef BALANCER_NODE
 #define BALANCER_NODE
 
-#include <mutex>
+#include <tuple>
+
 #include <atomic>
 // #include <memory>
 
@@ -26,7 +27,7 @@ public:
     std::atomic<size_t> count_;
 
     explicit Balancer(Balancer* up=nullptr, Balancer* down=nullptr);
-    Balancer* next();
+    std::tuple<Balancer*, size_t> next();
     [[nodiscard]] virtual bool is_internal() const;
 };
 

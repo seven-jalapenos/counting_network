@@ -1,5 +1,6 @@
 
 // #include <mutex>
+#include <tuple>
 
 #include "balancer.hpp"
 
@@ -8,10 +9,10 @@ namespace seven_jalapenos::CountingNetwork{
 Balancer::Balancer(Balancer* up, Balancer* down):
     up_(up), down_(down), count_(0) {}
 
-Balancer* Balancer::next() {
+std::tuple<Balancer*, size_t> Balancer::next() {
     size_t old = count_.fetch_add(1, std::memory_order_relaxed);
     Balancer *next = old % 2 == 0 ? up_ : down_;
-    return next;
+    return {next, old};
 }
 
 bool Balancer::is_internal() const { return true; }

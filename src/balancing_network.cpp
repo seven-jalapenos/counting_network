@@ -128,7 +128,8 @@ int BalancingNetwork::traverse(int id){
         id = id % width_;
     Balancer* current = entry_wires_[id];
     while(current->is_internal()){
-        current = current->next();
+        auto [next, count] = current->next();
+        current = next;
     }
     auto pod = dynamic_cast<ExternalBalancer*>(current);
     return pod->next();
