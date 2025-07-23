@@ -4,8 +4,10 @@
 
 #ifndef HASH_HPP
 #define HASH_HPP
+#include <cstddef>
 #include <memory>
 #include <vector>
+#include <atomic>
 
 namespace seven_jalapenos::HashQ {
 
@@ -13,19 +15,20 @@ class Hash {
 public:
     struct alignas(64) HashCell {
         int elt;
-        bool empty;
-        HashCell(): elt(0), empty(true) {}
+        std::atomic<bool> empty;
+        std::atomic<bool> valid;
+        HashCell(): elt(0), empty(true), valid(true) {}
     };
 
     size_t const length;
     std::vector<HashCell> arr;
-    std::vector<std::mutex> arr_mutex;
+    // std::vector<std::mutex> arr_mutex;
 
-    explicit Hash(size_t length): length(length), arr(length), arr_mutex(length){}
-    bool put(int key, int value);
-    int get_elt(int key);
-    int get_hash(int key) const;
-    bool valid_dq(int key);
+    explicit Hash(size_t length): length(length), arr(length) {}
+    bool put(size_t key, int value);
+    int get(size_t key); // removes and returns value
+    size_t get_hash(size_t key) const;
+    bool valid_dq(size_t key);
     bool is_empty() const;
     bool is_full() const;
 };

@@ -2,6 +2,8 @@
 // Created by jjurgenson on 25/06/19.
 //
 
+#include <algorithm>
+#include <cstddef>
 #include <iostream>
 #include <thread>
 #include <format>
@@ -10,32 +12,41 @@
 
 #include <cassert>
 
+struct Dequeue {
+    size_t number;
+    int t_id;
+    size_t accum;
+};
+
+std::ostream& operator<<(std::ostream &stream, const Dequeue &dq){
+    return stream << std::format("t{}: {}, {}", dq.t_id, dq.number, dq.accum);
+}
 
 int main() {
     typedef seven_jalapenos::CountingNetwork::CountingNetwork Network;
-    int width = 8;
-    int t_num = 1000;
-    int reps = 4;
+    int width = 4;
+    int t_num = 4;
+    int reps = 16;
     int wait = 0;
     Network net(width);
     std::thread threads[t_num];
     std::mutex io_mutex;
-    std::vector<std::string> rets;
-    std::vector<std::string> errs;
+    std::vector<Dequeue> rets;
+    std::vector<Dequeue> errs;
 
     auto get_inc = [&, width] (const int id, const int rep, Network& net) -> void {
-        size_t counts[rep];
+        std::tuple<size_t, size_t> counts[rep];
         for (int i = 0; i < rep; i++){
-            counts[i] = net.get_and_increment(id);
+            counts[i]  = net.get_and_increment(id);
         }
         std::lock_guard lock(io_mutex);
         for (int i = 0; i < rep; i++){
-            size_t res = counts[i];
-            std::string str = std::format("t{}: {}", id, res);
-            if (id != counts[i] / rep){
-                 errs.push_back(str);
+            auto [count, acc] = counts[i];
+            Dequeue dq {count, id, acc};
+            if (id != count / rep){
+                 errs.push_back(dq);
             }
-            rets.push_back(str);
+            rets.push_back(dq);
         }
     };
 
@@ -46,6 +57,10 @@ int main() {
     for(auto & t : threads) {
         t.join();
     }
+
+    auto sort_dq = [](Dequeue dq1, Dequeue dq2)-> bool { return dq1.number < dq2.number; };
+    std::sort(rets.begin(), rets.end(), sort_dq);
+    std::sort(errs.begin(), errs.end(), sort_dq);
     for (auto ret: rets) {
         std::cout << ret << "\n";
     }
