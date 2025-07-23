@@ -123,19 +123,16 @@ BalancingNetwork::BalancingNetwork(int width){
     }
 }
 
-std::tuple<int, size_t> BalancingNetwork::traverse(int id){
+int BalancingNetwork::traverse(int id){
     if (!valid_index(id))
         id = id % width_;
-    size_t acc = 0;
     Balancer* current = entry_wires_[id];
     while(current->is_internal()){
         auto [next, count] = current->next();
-        acc += count;
         current = next;
     }
     auto pod = dynamic_cast<ExternalBalancer*>(current);
-    auto [idx, count] = pod->next();
-    return {idx, acc};
+    return pod->next();
 }
 
 [[nodiscard]] int BalancingNetwork::width() const { return width_; }

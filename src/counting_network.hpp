@@ -8,16 +8,22 @@
 
 namespace seven_jalapenos {
 namespace CountingNetwork {
+//
+// struct CountingTuple {
+//     size_t count[2];
+//     bool idx0_is_larger;
+//
+//     CountingTuple() : idx0_is_larger(true) {}
+// };
 
 class CountingNetwork : BalancingNetwork {
 public:
-    // std::vector<size_t> counts;
-    // std::vector<std::mutex> mtx_arr_;
-    std::vector<std::atomic<size_t>> counts;
+    std::vector<size_t> counts;
+    std::vector<std::mutex> mtx_arr_;
 
     explicit CountingNetwork(int width);
 
-    std::tuple<size_t, size_t> get_and_increment(int id);
+    size_t get_and_increment(int id);
 
     [[nodiscard]] int width() const override;
 };

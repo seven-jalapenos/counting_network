@@ -15,7 +15,7 @@ public:
 
     ~BalancingNetwork();
 
-    std::tuple<int, size_t> traverse(int id);
+    int traverse(int id);
 
     [[nodiscard]] virtual int width() const;
 

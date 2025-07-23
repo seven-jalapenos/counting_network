@@ -3,7 +3,6 @@
 #ifndef BALANCER_NODE
 #define BALANCER_NODE
 
-#include <cstddef>
 #include <tuple>
 
 #include <atomic>
@@ -39,7 +38,7 @@ public:
     std::atomic<size_t> count_;
     // explicit OutputNode(T elt): point_(std::make_unique<T>(elt)) {}
     explicit ExternalBalancer(int idx): up_(idx), down_(idx + 1), count_(0) {}
-    std::tuple<int, size_t> next();
+    int next();
     [[nodiscard]] bool is_internal() const override;
 };
 
