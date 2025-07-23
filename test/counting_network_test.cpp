@@ -25,7 +25,7 @@ std::ostream& operator<<(std::ostream &stream, const Dequeue &dq){
 int main() {
     typedef seven_jalapenos::CountingNetwork::CountingNetwork Network;
     int width = 4;
-    int t_num = 4;
+    int t_num = 5;
     int reps = 16;
     int wait = 0;
     Network net(width);
