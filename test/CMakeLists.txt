@@ -32,3 +32,14 @@ target_link_libraries(test_queue
 set_target_properties(test_queue PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin
 )
+
+add_executable(produce_consume
+        producer_consumer_test.cpp
+)
+target_link_libraries(produce_consume
+        counting_network
+        hash_queue
+)
+set_target_properties(produce_consume PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin
+)

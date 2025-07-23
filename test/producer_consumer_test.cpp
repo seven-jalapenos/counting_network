@@ -18,7 +18,8 @@ int main(){
     int wait = 0;
 
     HashQ q(length, width);
-    std::vector<std::thread> threads;
+    std::vector<std::thread> nq_threads;
+    std::vector<std::thread> dq_threads;
     std::mutex io_mutex;
     std::vector<int> rets;
 
@@ -38,17 +39,25 @@ int main(){
     };
 
     for (int i = 0; i < t_num; i++) {
-        threads.emplace_back([&, i, rep](){
+        nq_threads.emplace_back([&, i, rep](){
             std::cout << "s" << "\n";
-            std::vector<int> local_rets;
             produce(q, i, rep);
-            consume(q, i, rep, rets, local_rets, io_mutex);
             std::cout << "e" << "\n";
         });
     }
-    for (auto & t : threads) {
+    for (auto & t : nq_threads) {
         t.join();
         // std::cout << std::format("thread {} has joined", std::hash<std::thread::id>{}(std::this_thread::get_id()));
+    }
+
+    for(int i = 0; i < t_num; i++){
+        dq_threads.emplace_back([&, i, rep](){
+            std::vector<int> local_rets;
+            consume(q, i, rep, rets, local_rets, io_mutex);
+        });
+    }
+    for (auto & t: dq_threads){
+        t.join();
     }
     std::sort(rets.begin(), rets.end());
     for (auto ret: rets) {

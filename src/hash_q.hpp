@@ -16,12 +16,12 @@ class HashQ {
 public:
     int const net_width;
     int const hash_length;
-    size_t size; // number of segments
+    std::atomic<size_t> size; // number of segments
     CountingNetwork::CountingNetwork nq_net;
     CountingNetwork::CountingNetwork dq_net;
 
-    HashQ(int length, int width)
-        :net_width(width), hash_length(length), size(1),
+    HashQ(int length, int width) :
+         net_width(width), hash_length(length), size(1),
          nq_net(width), dq_net(width),
          head_(new HashSegment(length)), tail_(head_.get()), aux_tail_(new HashSegment(length)) {}
     void enqueue(int value, int id);
