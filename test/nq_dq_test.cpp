@@ -1,7 +1,6 @@
 
 #include <algorithm>
 // #include <cstddef>
-#include <format>
 #include <iostream>
 #include <mutex>
 #include <thread>
@@ -11,10 +10,10 @@
 
 int main(){
     using namespace seven_jalapenos::HashQ;
-    int length = 32;
+    int length = 64;
     int width = 8;
-    int t_num = 1;
-    int rep = 33;
+    int t_num = 4;
+    int rep = 16;
     int wait = 0;
 
     HashQ q(length, width);
@@ -32,23 +31,20 @@ int main(){
             local_rets.push_back(q.dequeue(id));
         }
         std::lock_guard lck(mtx);
-        for (int i = 0; i < local_rets.size(); i++) {
-            rets.push_back(local_rets[i]);
+        for (auto & ret : local_rets) {
+            rets.push_back(ret);
         }
     };
 
     for (int i = 0; i < t_num; i++) {
         threads.emplace_back([&, i, rep](){
-            std::cout << "s" << "\n";
             std::vector<int> local_rets;
             produce(q, i, rep);
             consume(q, i, rep, rets, local_rets, io_mutex);
-            std::cout << "e" << "\n";
         });
     }
     for (auto & t : threads) {
         t.join();
-        // std::cout << std::format("thread {} has joined", std::hash<std::thread::id>{}(std::this_thread::get_id()));
     }
     std::sort(rets.begin(), rets.end());
     for (auto ret: rets) {
