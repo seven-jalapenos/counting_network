@@ -43,3 +43,14 @@ target_link_libraries(produce_consume
 set_target_properties(produce_consume PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin
 )
+
+add_executable(op_pair
+        op_pair.cpp
+)
+target_link_libraries(op_pair
+        counting_network
+        hash_queue
+)
+set_target_properties(op_pair PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin
+)

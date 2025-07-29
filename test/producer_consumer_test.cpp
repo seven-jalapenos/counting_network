@@ -13,8 +13,8 @@ int main(){
     using namespace seven_jalapenos::HashQ;
     int length = 32;
     int width = 8;
-    int t_num = 1;
-    int rep = 33;
+    int t_num = 2;
+    int rep = 17;
     int wait = 0;
 
     HashQ q(length, width);

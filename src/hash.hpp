@@ -17,7 +17,8 @@ public:
         int elt;
         std::atomic<bool> empty;
         std::atomic<bool> valid;
-        HashCell(): elt(0), empty(true), valid(true) {}
+        std::atomic<bool> will_enqueue;
+        HashCell(): elt(0), empty(true), valid(true), will_enqueue(true) {}
     };
 
     size_t const length;
