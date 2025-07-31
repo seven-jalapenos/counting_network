@@ -10,6 +10,10 @@ namespace seven_jalapenos {
 namespace HashQ {
 
 int HashQ::dequeue(int id) {
+    // change phase to dequeue
+    // if (head_->enqueue_phase.load())
+    //     head_->enqueue_phase.store(false);
+
     auto [key, acc] = dq_net.get_and_increment(id);
     HashSegment* next = size.load(std::memory_order_acquire) > 1 ?
                         head_->next.get() : nullptr;
@@ -32,6 +36,10 @@ int HashQ::dequeue(int id) {
 }
 
 void HashQ::enqueue(int value, int id) {
+    // if (!head_->enqueue_phase.load()){
+        
+    // }
+
     auto [key, acc] = nq_net.get_and_increment(id);
     HashSegment* aux = aux_tail_.get();
     // threads will enqueue at aux_tail_ if early or tail_ is being reset >>

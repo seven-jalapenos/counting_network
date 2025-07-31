@@ -54,3 +54,14 @@ target_link_libraries(op_pair
 set_target_properties(op_pair PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin
 )
+
+add_executable(million
+        million.cpp
+)
+target_link_libraries(million
+        counting_network
+        hash_queue
+)
+set_target_properties(million PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin
+)

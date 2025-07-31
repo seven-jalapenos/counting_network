@@ -17,8 +17,7 @@ public:
         int elt;
         std::atomic<bool> empty;
         std::atomic<bool> valid;
-        std::atomic<bool> will_enqueue;
-        HashCell(): elt(0), empty(true), valid(true), will_enqueue(true) {}
+        HashCell(): elt(0), empty(true), valid(true) {}
     };
 
     size_t const length;
@@ -36,10 +35,15 @@ public:
 
 class HashSegment {
 public:
+    std::atomic<bool> enqueue_phase;
+    // std::shared_mutex nq_mtx;
+    // std::shared_mutex dq_mtx;
     std::unique_ptr<HashSegment> next;
     Hash hash;
 
-    explicit HashSegment(size_t length): next(nullptr), hash(length) {}
+    explicit HashSegment(size_t length): enqueue_phase(true), next(nullptr), hash(length) {}
+    // void set_phase_enqueue();
+    // void set_phase_dequeue();
 };
 
 
