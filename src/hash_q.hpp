@@ -20,17 +20,14 @@ public:
     CountingNetwork::CountingNetwork nq_net;
     CountingNetwork::CountingNetwork dq_net;
 
-    HashQ(int length, int width) :
-         net_width(width), hash_length(length), size(1),
-         nq_net(width), dq_net(width),
-         head_(new HashSegment(length)), tail_(head_.get()), aux_tail_(new HashSegment(length)) {}
+    HashQ(int length, int width);
     void enqueue(int value, int id);
     int dequeue(int id);
 
 private:
     std::unique_ptr<HashSegment> head_;
-    HashSegment* tail_;
-    std::unique_ptr<HashSegment> aux_tail_;
+    std::atomic<HashSegment*> tail_;
+    std::atomic<HashSegment*> aux_tail_;
     // aux_tail_ will catch early enqueues
 };
 

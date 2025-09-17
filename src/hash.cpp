@@ -13,7 +13,7 @@ inline size_t Hash::get_hash(size_t key) const {
 }
 
 bool Hash::put(size_t key, int value) {
-    int h = get_hash(key);
+    size_t h = get_hash(key);
     // std::lock_guard lock(arr_mutex[h]);
     if (!arr[h].empty.load(std::memory_order_acquire) ||
         !arr[h].valid.load(std::memory_order_acquire)) {
