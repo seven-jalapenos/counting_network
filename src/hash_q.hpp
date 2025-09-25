@@ -14,13 +14,12 @@ namespace HashQ {
 
 class HashQ {
 public:
-    int const net_width;
-    int const hash_length;
+    int const width;
     std::atomic<size_t> size; // number of segments
     CountingNetwork::CountingNetwork nq_net;
     CountingNetwork::CountingNetwork dq_net;
 
-    HashQ(int length, int width);
+    HashQ(int width);
     void enqueue(int value, int id);
     int dequeue(int id);
 

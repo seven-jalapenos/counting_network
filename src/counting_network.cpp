@@ -22,7 +22,8 @@ std::tuple<size_t, size_t> CountingNetwork::get_and_increment(int id) {
     using std::array;
     auto [order, count] = traverse(id);
     size_t last = counts[order].fetch_add(width_, std::memory_order_relaxed);
-    return {last, count};
+    size_t epoch = last / width_;
+    return {last, epoch};
 }
 
 [[nodiscard]] int CountingNetwork::width() const { return width_; }

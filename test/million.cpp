@@ -8,7 +8,7 @@
 #include <vector>
 #include <cassert>
 
-#include "hash_q.hpp"
+#include "ttq.hpp"
 
 // int seive(int work){
 //     int n = work;
@@ -33,14 +33,14 @@
 // }
 
 int main(int argc, char* argv[]){
-    typedef seven_jalapenos::HashQ::HashQ HashQ;
+    typedef seven_jalapenos::TTQ::TTQ TTQ;
     // std::mutex io_mtx;
     // size_t global_thread_id = 0;
     int million = 1000000;
     int runs = 10;
     int warm_ups = 3;
     int num_processor = 12;
-    int num_threads = 3;
+    int num_threads = 12;
     int length = 64;
     int width = 16;
     switch (argc) {
@@ -77,7 +77,7 @@ int main(int argc, char* argv[]){
     //     // return 0;
     // };
 
-    auto enqueue_group = [num_threads](int iters, HashQ* q, int tid)->void{
+    auto enqueue_group = [num_threads](int iters, TTQ* q, int tid)->void{
         for (int i = 0; i < iters; i++) {
             q->enqueue(tid + i * num_threads, tid);
         }
@@ -87,7 +87,7 @@ int main(int argc, char* argv[]){
 
     // warm up
     for (int i = 0; i < warm_ups; i++){
-        auto q = std::make_unique<HashQ>(length, width);
+        auto q = std::make_unique<TTQ>(width, million);
         std::vector<std::thread> threads;
         for (int ii = 0; ii < num_threads; ii++){
             int iters = ii < extra_iter ? iter_per_thread + 1 : iter_per_thread;
@@ -101,7 +101,7 @@ int main(int argc, char* argv[]){
     using namespace std::chrono;
     duration<double> total_time; 
     for (int i = 0; i < runs; i++){
-        auto q = std::make_unique<HashQ>(length, width);
+        auto q = std::make_unique<TTQ>(width, million);
         std::vector<std::thread> threads;
         auto start = high_resolution_clock::now();
         for (int ii = 0; ii < num_threads; ii++){
