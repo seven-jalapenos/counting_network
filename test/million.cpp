@@ -40,9 +40,9 @@ int main(int argc, char* argv[]){
     int runs = 10;
     int warm_ups = 3;
     int num_processor = 12;
-    int num_threads = 12;
+    int num_threads = 32;
     int length = 64;
-    int width = 16;
+    int width = 8;
     switch (argc) {
     case 5:
         width = std::stoi(argv[4]);
@@ -85,6 +85,16 @@ int main(int argc, char* argv[]){
         // std::cout << "combinc thread #" << global_thread_id++ << " running on cpu " << sched_getcpu() << "\n";
     };
 
+    auto dequeue_group = [num_threads](int iters, TTQ* q, int tid)->void{
+        for (int i = 0; i < iters; i++) {
+            q->dequeue(tid);
+        }
+    };
+
+    // auto mixed_group = [num_threads](int iters, TTQ* q, int tid)->void{
+    //     for (int i = 0; i < iters)
+    // };
+
     // warm up
     for (int i = 0; i < warm_ups; i++){
         auto q = std::make_unique<TTQ>(width, million);
@@ -96,29 +106,61 @@ int main(int argc, char* argv[]){
         for (auto & t: threads){
             t.join();
         }
-    }
-
-    using namespace std::chrono;
-    duration<double> total_time; 
-    for (int i = 0; i < runs; i++){
-        auto q = std::make_unique<TTQ>(width, million);
-        std::vector<std::thread> threads;
-        auto start = high_resolution_clock::now();
+        threads.clear();
         for (int ii = 0; ii < num_threads; ii++){
             int iters = ii < extra_iter ? iter_per_thread + 1 : iter_per_thread;
-            threads.emplace_back(enqueue_group, iters, q.get(), ii);
+            threads.emplace_back(dequeue_group, iters, q.get(), ii);
         }
         for (auto & t: threads){
             t.join();
         }
-        auto end = high_resolution_clock::now();
-        total_time += end - start;
     }
-    double avg_time = total_time.count() / runs;
-    double megaops_per_sec = 1 / avg_time;
+
+    using namespace std::chrono;
+    duration<double> total_nq_time; 
+    duration<double> total_dq_time;
+    for (int i = 0; i < runs; i++){
+        auto q = std::make_unique<TTQ>(width, million);
+
+        // enqueue group
+        std::vector<std::thread> nq_threads;
+        auto start = high_resolution_clock::now();
+        for (int ii = 0; ii < num_threads; ii++){
+            int iters = ii < extra_iter ? iter_per_thread + 1 : iter_per_thread;
+            nq_threads.emplace_back(enqueue_group, iters, q.get(), ii);
+        }
+        for (auto & t: nq_threads){
+            t.join();
+        }
+        auto end = high_resolution_clock::now();
+        total_nq_time += end - start;
+
+        // dequeue group
+        std::vector<std::thread>dq_threads;
+        start = high_resolution_clock::now();
+        for (int ii = 0; ii < num_threads; ii++){
+            int iters = ii < extra_iter ? iter_per_thread + 1 : iter_per_thread;
+            dq_threads.emplace_back(dequeue_group, iters, q.get(), ii);
+        }
+        for (auto & t: dq_threads){
+            t.join();
+        }
+        end = high_resolution_clock::now();
+        total_dq_time += end - start;
+
+    }
+
+    //enqueue time
+    double avg_nq_time = total_nq_time.count() / runs;
+    double megaops_per_sec_nq = 1 / avg_nq_time;
+
+    //dequeue time
+    double avg_dq_time = total_dq_time.count() / runs;
+    double megaops_per_sec_dq = 1 / avg_dq_time;
 
 
-    std::cout << "megaops per second: " << megaops_per_sec << std::endl;
+    std::cout << "megaops per second (enqueue): " << megaops_per_sec_nq << "\n";
+    std::cout << "megaops per second (dequeue): " << megaops_per_sec_dq << "\n";
     // std::cout << "\n" << "global thread id: " << global_thread_id << " theoretically correct threads " << ((warm_ups * num_thread) + (runs * num_thread)) * 2 << "\n";
 
     return 0;

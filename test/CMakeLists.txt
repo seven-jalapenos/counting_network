@@ -22,16 +22,17 @@ set_target_properties(test_counting PROPERTIES
 )
 
 
-# add_executable(test_queue
-#         nq_dq_test.cpp
-# )
-# target_link_libraries(test_queue
-#         counting_network
-#         hash_queue
-# )
-# set_target_properties(test_queue PROPERTIES
-#         RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin
-# )
+add_executable(test_queue
+        nq_dq_test.cpp
+)
+target_link_libraries(test_queue
+        counting_network
+        hash_queue
+        ticket_queue
+)
+set_target_properties(test_queue PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin
+)
 
 # add_executable(produce_consume
 #         producer_consumer_test.cpp
