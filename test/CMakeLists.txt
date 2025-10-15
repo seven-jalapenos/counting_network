@@ -11,15 +11,15 @@
 # )
 
 
-add_executable(test_counting
-        counting_network_test.cpp
-)
-target_link_libraries(test_counting
-        counting_network
-)
-set_target_properties(test_counting PROPERTIES
-        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin
-)
+# add_executable(test_counting
+#         counting_network_test.cpp
+# )
+# target_link_libraries(test_counting
+#         counting_network
+# )
+# set_target_properties(test_counting PROPERTIES
+#         RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin
+# )
 
 
 add_executable(test_queue
@@ -56,16 +56,16 @@ set_target_properties(test_queue PROPERTIES
 #         RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin
 # )
 
-add_executable(million
-        million.cpp
-)
-target_link_libraries(million
-        ticket_queue
-        counting_network
-)
-set_target_properties(million PROPERTIES
-        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin
-)
+# add_executable(million
+#         million.cpp
+# )
+# target_link_libraries(million
+#         ticket_queue
+#         counting_network
+# )
+# set_target_properties(million PROPERTIES
+#         RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin
+# )
 
 add_executable(counting_bm
         counting_bm.cpp
@@ -76,3 +76,14 @@ target_link_libraries(counting_bm
 set_target_properties(counting_bm PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin
 )
+
+# add_executable(atomic_op
+#         atomic_op.cpp
+# )
+# target_link_libraries(atomic_op
+#         counting_network
+#         ticket_queue
+# )
+# set_target_properties(atomic_op PROPERTIES
+#         RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin
+# )

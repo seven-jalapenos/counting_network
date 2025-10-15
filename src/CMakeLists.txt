@@ -17,6 +17,7 @@ set(TTQLib ticket_queue)
 add_library(${TTQLib} STATIC
     ring_array.cpp    
     ttq.cpp
+    atq.cpp
 )
 
 target_include_directories(${Lib} PUBLIC

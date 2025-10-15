@@ -7,3 +7,5 @@ build
 .cache
 compile_commands.json
 test/bin/*
+test/final.py
+*.csv
