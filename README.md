@@ -7,7 +7,7 @@ there are a lot of other files that don't do anything
 
 ## Instructions
 
-to run the benchmark I wrote run the following in terminal:  
+to run the benchmark I used run the following in terminal:  
 `mkdir build && cd build && cmake .. && make`  
 `cd ../test && python bench.py`  
 this will run the benchmark for 1-32 threads on queues with a network of width 4, 8, and 16 and write the results to a **.csv**
